@@ -2,14 +2,16 @@
 
 import { StyleSheet } from 'react-native';
 import { Text, View } from '@/components/Themed';
-import DreamList from '@components/DreamList';
+
+// Correction de l'importation de DreamList
+import DreamList from '../../components/DreamList'; // <-- Chemin relatif
 
 export default function TabThreeScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Tab Three</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <DreamList/>
+      <View style={styles.separator} />
+      <DreamList />
     </View>
   );
 }
@@ -28,5 +30,6 @@ const styles = StyleSheet.create({
     marginVertical: 30,
     height: 1,
     width: '80%',
+    backgroundColor: '#eee', // Ajout pour éviter le problème de lightColor/darkColor
   },
 });

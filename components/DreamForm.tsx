@@ -9,7 +9,10 @@ const { width } = Dimensions.get('window');
 
 export default function DreamForm() {
   const [dreamText, setDreamText] = useState('');
+  const [dreamLocation, setDreamLocation] = useState('');
+  const [dreamEvent, setDreamEvent] = useState('');
   const [isLucidDream, setIsLucidDream] = useState(false);
+  const [date, setDate] = useState('');
 
   const handleDreamSubmission = async () => {
     try {
@@ -18,7 +21,7 @@ export default function DreamForm() {
       const formDataArray = existingData ? JSON.parse(existingData) : [];
 
       // Ajouter le nouveau formulaire au tableau
-      formDataArray.push({ dreamText, isLucidDream });
+      formDataArray.push({ dreamText, dreamLocation, dreamEvent, isLucidDream, date });
 
       // Sauvegarder le tableau mis à jour dans AsyncStorage
       await AsyncStorage.setItem('dreamFormDataArray', JSON.stringify(formDataArray));
@@ -30,18 +33,41 @@ export default function DreamForm() {
 
     // Réinitialisation du formulaire
     setDreamText('');
+    setDreamLocation('');
+    setDreamEvent('');
     setIsLucidDream(false);
+    setDate('');
   };
 
   return (
     <View style={styles.container}>
       <TextInput
-        label="Rêve"
+        label="Tu as rêvé de quoi ?"
         value={dreamText}
         onChangeText={setDreamText}
         mode="outlined"
         multiline
-        numberOfLines={6}
+        numberOfLines={3}
+        style={[styles.input, { width: width * 0.8, alignSelf: 'center' }]}
+      />
+
+      <TextInput
+        label="C'était où ?"
+        value={dreamLocation}
+        onChangeText={setDreamLocation}
+        mode="outlined"
+        multiline
+        numberOfLines={2}
+        style={[styles.input, { width: width * 0.8, alignSelf: 'center' }]}
+      />
+
+      <TextInput
+        label="Que se passait-il ?"
+        value={dreamEvent}
+        onChangeText={setDreamEvent}
+        mode="outlined"
+        multiline
+        numberOfLines={3}
         style={[styles.input, { width: width * 0.8, alignSelf: 'center' }]}
       />
 

@@ -5,6 +5,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from 'expo-router';
 import { useCallback } from 'react';
+import {LocaleConfig} from 'react-native-calendars';
 
 export default function DreamList() {
 
