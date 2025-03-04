@@ -171,8 +171,6 @@ export default function DreamForm() {
         <Picker.Item label="Neutre" value="neutre" />
       </Picker>
 
-      <Checkbox.Item label="Rêve Lucide" status={isLucidDream ? 'checked' : 'unchecked'} onPress={() => setIsLucidDream(!isLucidDream)} />
-
       <Button mode="contained" onPress={handleDreamSubmission} style={styles.button}>
         Soumettre
       </Button>
