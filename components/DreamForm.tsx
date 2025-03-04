@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import { TextInput, Button, Checkbox } from 'react-native-paper';
+import { Calendar } from 'react-native-calendars';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { width } = Dimensions.get('window');
@@ -71,6 +72,15 @@ export default function DreamForm() {
         style={[styles.input, { width: width * 0.8, alignSelf: 'center' }]}
       />
 
+      {/* Ajout du sélecteur de date */}
+      <Calendar
+        onDayPress={(day) => setDate(day.dateString)}
+        markedDates={{
+          [date]: { selected: true, selectedColor: 'blue' }
+        }}
+        style={styles.calendar}
+      />
+
       <View style={styles.checkboxContainer}>
         <Checkbox.Item
           label="Rêve Lucide"
@@ -101,4 +111,9 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 8,
   },
+  calendar: {
+    borderRadius: 10,
+    elevation: 4,
+    marginBottom: 16,
+  }
 });
