@@ -1,11 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 
 export default function FourScreen() {
   const { dream } = useLocalSearchParams();
   const router = useRouter();
-
   const dreamData = dream ? JSON.parse(dream) : null;
 
   if (!dreamData) {
@@ -15,6 +15,33 @@ export default function FourScreen() {
       </View>
     );
   }
+
+  // 🔄 Fonction pour modifier un rêve
+  const handleEditDream = () => {
+    router.push(`/editDream?dream=${encodeURIComponent(JSON.stringify(dreamData))}`);
+  };
+
+  // 🗑️ Fonction pour supprimer un rêve
+  const handleDeleteDream = async () => {
+    Alert.alert("Supprimer ?", "Voulez-vous vraiment supprimer ce rêve ?", [
+      { text: "Annuler", style: "cancel" },
+      { text: "Supprimer", style: "destructive", onPress: async () => {
+        try {
+          const existingData = await AsyncStorage.getItem('dreamFormDataArray');
+          let formDataArray = existingData ? JSON.parse(existingData) : [];
+
+          // Filtrer pour enlever le rêve sélectionné
+          formDataArray = formDataArray.filter(d => d.dreamText !== dreamData.dreamText);
+
+          await AsyncStorage.setItem('dreamFormDataArray', JSON.stringify(formDataArray));
+          Alert.alert("Supprimé", "Le rêve a été supprimé.");
+          router.back();
+        } catch (error) {
+          console.error("Erreur lors de la suppression :", error);
+        }
+      }},
+    ]);
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -67,6 +94,15 @@ export default function FourScreen() {
           </Text>
         </View>
       </View>
+
+      {/* 📝 Boutons Modifier et Supprimer 📝 */}
+      <TouchableOpacity style={styles.editButton} onPress={handleEditDream}>
+        <Text style={styles.editButtonText}>✏️ Modifier</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteDream}>
+        <Text style={styles.deleteButtonText}>🗑️ Supprimer</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 }
@@ -158,6 +194,30 @@ const styles = StyleSheet.create({
   descriptionText: {
     fontSize: 16,
     color: '#444',
+  },
+  editButton: {
+    backgroundColor: 'blue',
+    padding: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  editButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  deleteButton: {
+    backgroundColor: 'red',
+    padding: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  deleteButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 
