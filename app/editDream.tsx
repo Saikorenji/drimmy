@@ -22,7 +22,7 @@ export default function EditDream() {
   const [personalMeaning, setPersonalMeaning] = useState('');
   const [tone, setTone] = useState('');
 
-  // ✅ Correction : Remplir les champs uniquement au premier rendu
+  // ✅ Remplir les champs uniquement au premier rendu
   useEffect(() => {
     if (!dreamData) return;
 
@@ -38,15 +38,15 @@ export default function EditDream() {
     setClarity(prev => prev || dreamData.clarity || '');
     setPersonalMeaning(prev => prev || dreamData.personalMeaning || '');
     setTone(prev => prev || dreamData.tone || '');
-  }, []); // ✅ Exécute l'effet une seule fois
+  }, []); // ✅ Exécute une seule fois
 
-  // ✅ Sauvegarde des modifications avec vérification
+  // ✅ Modifier le rêve existant
   const handleSaveChanges = useCallback(async () => {
     try {
       const existingData = await AsyncStorage.getItem('dreamFormDataArray');
       let formDataArray = existingData ? JSON.parse(existingData) : [];
 
-      // Vérifier si le rêve à modifier existe bien
+      // Vérifie si le rêve existe
       const dreamIndex = formDataArray.findIndex(d => d.dreamText === dreamData?.dreamText);
 
       if (dreamIndex !== -1) {
@@ -59,19 +59,50 @@ export default function EditDream() {
 
         await AsyncStorage.setItem('dreamFormDataArray', JSON.stringify(formDataArray));
         Alert.alert("Succès", "Les modifications ont été enregistrées !");
-        router.back(); // ✅ Retour à la page des détails du rêve
+        router.back(); // ✅ Retour
       } else {
-        Alert.alert("Erreur", "Impossible de trouver le rêve à modifier.");
+        Alert.alert("Erreur", "Rêve introuvable !");
       }
     } catch (error) {
       console.error("Erreur lors de la mise à jour :", error);
-      Alert.alert("Erreur", "Une erreur est survenue lors de la modification.");
+      Alert.alert("Erreur", "Une erreur est survenue.");
     }
   }, [
     dreamText, dreamLocation, dreamEvent, date, dreamType,
     emotionBefore, emotionAfter, tags, emotionIntensity,
     clarity, personalMeaning, tone, router, dreamData
   ]);
+
+  // 🚀 Supprimer le rêve
+  const handleDeleteDream = useCallback(async () => {
+    Alert.alert(
+      "Confirmation",
+      "Voulez-vous vraiment supprimer ce rêve ?",
+      [
+        { text: "Annuler", style: "cancel" },
+        {
+          text: "Supprimer",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              const existingData = await AsyncStorage.getItem('dreamFormDataArray');
+              let formDataArray = existingData ? JSON.parse(existingData) : [];
+
+              // ✅ Filtrer pour supprimer le rêve
+              const updatedData = formDataArray.filter(d => d.dreamText !== dreamData?.dreamText);
+
+              await AsyncStorage.setItem('dreamFormDataArray', JSON.stringify(updatedData));
+              Alert.alert("Succès", "Le rêve a été supprimé.");
+              router.push('/(tabs)/three'); // ✅ Redirection vers la liste des rêves
+            } catch (error) {
+              console.error("Erreur lors de la suppression :", error);
+              Alert.alert("Erreur", "Impossible de supprimer le rêve.");
+            }
+          }
+        }
+      ]
+    );
+  }, [dreamData, router]);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -88,7 +119,9 @@ export default function EditDream() {
       <TextInput placeholder="Tonalité (Positive, Neutre, Négative)" value={tone} onChangeText={setTone} style={styles.input} />
       <TextInput placeholder="Description du rêve" value={dreamEvent} onChangeText={setDreamEvent} multiline numberOfLines={3} style={styles.input} />
 
-      <Button title="💾 Enregistrer les modifications" onPress={handleSaveChanges} />
+      <Button title="💾 Enregistrer les modifications" onPress={handleSaveChanges} color="blue" />
+      <View style={styles.spacing} />
+      <Button title="🗑 Supprimer ce rêve" onPress={handleDeleteDream} color="red" />
     </ScrollView>
   );
 }
@@ -104,4 +137,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     fontSize: 16
   },
+  spacing: { height: 10 }, // Espacement entre les boutons
 });
