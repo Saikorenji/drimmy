@@ -1,6 +1,7 @@
 import { StyleSheet, View, ScrollView } from 'react-native';
 import { Text } from '@/components/Themed';
 import DreamForm from '@/components/DreamForm';
+import DreamList from '@/components/DreamList';
 
 export default function TabOneScreen() {
   return (
