@@ -49,7 +49,7 @@ export default function DreamList() {
             style={styles.dreamItem}
             onPress={() => router.push(`/four?dream=${encodeURIComponent(JSON.stringify(item))}`)}
           >
-            <Text style={styles.dreamTitle}>{item.dreamText} - {item.isLucidDream ? 'Lucide' : 'Non Lucide'}</Text>
+            <Text style={styles.dreamTitle}>{item.dreamText}</Text>
           </TouchableOpacity>
         )}
       />

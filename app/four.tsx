@@ -19,6 +19,9 @@ export default function FourScreen() {
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.header}>
+        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+          <Text style={styles.backText}>← Retour</Text>
+        </TouchableOpacity>
         <Text style={styles.headerTitle}>🌙 Détails du Rêve</Text>
       </View>
 
@@ -53,6 +56,16 @@ export default function FourScreen() {
 
         <Text style={styles.label}>🔵 Tonalité :</Text>
         <Text style={[styles.value, { color: getToneColor(dreamData.tone) }]}>{dreamData.tone || 'Neutre'}</Text>
+      </View>
+
+      {/* 📜 Ajout de la description du rêve 📜 */}
+      <View style={styles.descriptionContainer}>
+        <Text style={styles.label}>📜 Description du rêve :</Text>
+        <View style={styles.descriptionBox}>
+          <Text style={styles.descriptionText}>
+            {dreamData.dreamEvent ? dreamData.dreamEvent : 'Aucune description renseignée.'}
+          </Text>
+        </View>
       </View>
     </ScrollView>
   );
@@ -110,6 +123,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 3 },
     shadowRadius: 5,
     elevation: 4,
+    marginBottom: 20,
   },
   label: {
     fontSize: 18,
@@ -127,6 +141,23 @@ const styles = StyleSheet.create({
     color: 'red',
     textAlign: 'center',
     marginTop: 20,
+  },
+  descriptionContainer: {
+    marginTop: 20,
+    paddingHorizontal: 16,
+  },
+  descriptionBox: {
+    backgroundColor: '#FAF3F3',
+    padding: 15,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+    minHeight: 80,
+    justifyContent: 'center',
+  },
+  descriptionText: {
+    fontSize: 16,
+    color: '#444',
   },
 });
 
