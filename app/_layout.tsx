@@ -3,27 +3,30 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native
 import { useFonts } from 'expo-font';
 import { Stack, Tabs } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
+import { useEffect, useState, createContext, useContext } from 'react';
 import 'react-native-reanimated';
-import { PaperProvider } from 'react-native-paper';
+import { PaperProvider, Switch } from 'react-native-paper';
+import { View } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { useColorScheme } from '@/components/useColorScheme';
 import TabBarIcon from '@/components/TabBarIcon';
+
+// 🎯 Création du Contexte pour le Mode Sombre
+const DarkModeContext = createContext();
 
 export {
   ErrorBoundary,
 } from 'expo-router';
 
 export const unstable_settings = {
-  initialRouteName: 'HomeScreen', // ✅ Met l'accueil en page par défaut
+  initialRouteName: 'HomeScreen',
 };
 
-// ✅ Empêche l'écran de chargement de s'afficher trop longtemps
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    SpaceMono: require('@/assets/fonts/SpaceMono-Regular.ttf'), // ✅ Correction du chemin
+    SpaceMono: require('@/assets/fonts/SpaceMono-Regular.ttf'),
     ...FontAwesome.font,
   });
 
@@ -41,33 +44,69 @@ export default function RootLayout() {
     return null;
   }
 
-  return <RootLayoutNav />;
+  return <DarkModeProvider />;
 }
 
-function RootLayoutNav() {
-  const colorScheme = useColorScheme();
+// ✅ Provider pour le Mode Sombre
+function DarkModeProvider() {
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  // ✅ Charger la préférence du mode sombre au lancement
+  useEffect(() => {
+    const loadDarkMode = async () => {
+      const storedTheme = await AsyncStorage.getItem('darkMode');
+      if (storedTheme !== null) {
+        setIsDarkMode(JSON.parse(storedTheme));
+      }
+    };
+    loadDarkMode();
+  }, []);
+
+  // ✅ Basculer et sauvegarder le mode sombre
+  const toggleDarkMode = async () => {
+    const newValue = !isDarkMode;
+    setIsDarkMode(newValue);
+    await AsyncStorage.setItem('darkMode', JSON.stringify(newValue));
+  };
 
   return (
-    <PaperProvider>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'À propos de l\'application' }} />
-        </Stack>
-      </ThemeProvider>
-    </PaperProvider>
+    <DarkModeContext.Provider value={{ isDarkMode, toggleDarkMode }}>
+      <PaperProvider>
+        <ThemeProvider value={isDarkMode ? DarkTheme : DefaultTheme}>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'À propos de l\'application' }} />
+          </Stack>
+        </ThemeProvider>
+      </PaperProvider>
+    </DarkModeContext.Provider>
   );
 }
 
 export function TabLayout() {
-  const colorScheme = useColorScheme();
+  const { isDarkMode, toggleDarkMode } = useContext(DarkModeContext);
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: colorScheme === 'dark' ? '#fff' : '#007bff',
+        tabBarActiveTintColor: isDarkMode ? '#fff' : '#007bff',
       }}
     >
+      {/* ✅ Paramètres avec Mode Sombre */}
+      <Tabs.Screen
+        name="two"
+        options={{
+          title: 'Paramètres',
+          tabBarLabel: 'Paramètres',
+          tabBarIcon: ({ color }) => <TabBarIcon name="cogs" color={color} />,
+          headerRight: () => (
+            <View style={{ marginRight: 10 }}>
+              <Switch value={isDarkMode} onValueChange={toggleDarkMode} />
+            </View>
+          ),
+        }}
+      />
+
       {/* ✅ Accueil */}
       <Tabs.Screen
         name="HomeScreen"
@@ -78,7 +117,7 @@ export function TabLayout() {
         }}
       />
 
-      {/* ✅ Correction : Renommage de "index" en "Formulaire de Rêve" */}
+      {/* ✅ Formulaire */}
       <Tabs.Screen
         name="index"
         options={{
@@ -95,16 +134,6 @@ export function TabLayout() {
           title: 'Liste des Rêves',
           tabBarLabel: 'Liste des Rêves',
           tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />,
-        }}
-      />
-
-      {/* ✅ Paramètres */}
-      <Tabs.Screen
-        name="two"
-        options={{
-          title: 'Paramètres',
-          tabBarLabel: 'Paramètres',
-          tabBarIcon: ({ color }) => <TabBarIcon name="cogs" color={color} />,
         }}
       />
     </Tabs>
