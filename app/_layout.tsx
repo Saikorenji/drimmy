@@ -15,14 +15,15 @@ export {
 } from 'expo-router';
 
 export const unstable_settings = {
-  initialRouteName: '(tabs)',
+  initialRouteName: 'HomeScreen', // ✅ Met l'accueil en page par défaut
 };
 
+// ✅ Empêche l'écran de chargement de s'afficher trop longtemps
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    SpaceMono: require('@/assets/fonts/SpaceMono-Regular.ttf'), // ✅ Correction du chemin
     ...FontAwesome.font,
   });
 
@@ -67,17 +68,27 @@ export function TabLayout() {
         tabBarActiveTintColor: colorScheme === 'dark' ? '#fff' : '#007bff',
       }}
     >
-      {/* ✅ Correction : Renommage de l'onglet index en "Formulaire de Rêve" */}
+      {/* ✅ Accueil */}
+      <Tabs.Screen
+        name="HomeScreen"
+        options={{
+          title: 'Accueil',
+          tabBarLabel: 'Accueil',
+          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
+        }}
+      />
+
+      {/* ✅ Correction : Renommage de "index" en "Formulaire de Rêve" */}
       <Tabs.Screen
         name="index"
         options={{
           title: 'Formulaire de Rêve',
-          tabBarLabel: 'Formulaire de Rêve',
+          tabBarLabel: 'Formulaire',
           tabBarIcon: ({ color }) => <TabBarIcon name="edit" color={color} />,
         }}
       />
 
-      {/* Liste des Rêves */}
+      {/* ✅ Liste des Rêves */}
       <Tabs.Screen
         name="List"
         options={{
@@ -87,7 +98,7 @@ export function TabLayout() {
         }}
       />
 
-      {/* Onglet supplémentaire */}
+      {/* ✅ Paramètres */}
       <Tabs.Screen
         name="two"
         options={{
