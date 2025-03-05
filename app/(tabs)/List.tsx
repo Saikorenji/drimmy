@@ -9,7 +9,7 @@ import DreamList from '../../components/DreamList'; // <-- Chemin relatif
 export default function TabThreeScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab Three</Text>
+      <Text style={styles.title}>Liste de tes rêves</Text>
       <View style={styles.separator} />
       <DreamList />
     </View>

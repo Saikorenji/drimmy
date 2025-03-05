@@ -46,9 +46,6 @@ export default function FourScreen() {
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Text style={styles.backText}>← Retour</Text>
-        </TouchableOpacity>
         <Text style={styles.headerTitle}>🌙 Détails du Rêve</Text>
       </View>
 

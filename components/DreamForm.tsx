@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Dimensions, Text, ScrollView } from 'react-native';
+import { View, StyleSheet, Dimensions, Text, ScrollView, Alert } from 'react-native';
 import { TextInput, Button, Checkbox } from 'react-native-paper';
 import { Calendar } from 'react-native-calendars';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -25,6 +25,14 @@ export default function DreamForm() {
   const [clarity, setClarity] = useState(5);
 
   const handleDreamSubmission = async () => {
+    // Vérification si la date sélectionnée est dans le futur
+    const today = new Date().toISOString().split('T')[0]; // Date d'aujourd'hui en format YYYY-MM-DD
+
+    if (date > today) {
+      Alert.alert("Erreur", "La date du rêve ne peut pas être dans le futur !");
+      return;
+    }
+
     try {
       // Récupération des rêves existants
       const existingData = await AsyncStorage.getItem('dreamFormDataArray');
@@ -74,12 +82,12 @@ export default function DreamForm() {
 
   return (
     <ScrollView style={styles.container}>
-    <Text>Date du rêve :</Text>
-          <Calendar
-            onDayPress={(day) => setDate(day.dateString)}
-            markedDates={{ [date]: { selected: true, selectedColor: 'blue' } }}
-            style={styles.calendar}
-          />
+      <Text>Date du rêve :</Text>
+      <Calendar
+        onDayPress={(day) => setDate(day.dateString)}
+        markedDates={{ [date]: { selected: true, selectedColor: 'blue' } }}
+        style={styles.calendar}
+      />
 
       <TextInput
         label="Tu as rêvé de quoi ?"
@@ -185,4 +193,3 @@ const styles = StyleSheet.create({
   picker: { height: 50, width: width * 0.8, alignSelf: 'center' },
   button: { marginTop: 8 },
 });
-
