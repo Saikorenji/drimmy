@@ -11,16 +11,13 @@ import { useColorScheme } from '@/components/useColorScheme';
 import TabBarIcon from '@/components/TabBarIcon';
 
 export {
-  // Catch any errors thrown by the Layout component.
   ErrorBoundary,
 } from 'expo-router';
 
 export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
   initialRouteName: '(tabs)',
 };
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
@@ -29,7 +26,6 @@ export default function RootLayout() {
     ...FontAwesome.font,
   });
 
-  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
     if (error) throw error;
   }, [error]);
@@ -55,7 +51,7 @@ function RootLayoutNav() {
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+          <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'À propos de l\'application' }} />
         </Stack>
       </ThemeProvider>
     </PaperProvider>
@@ -66,19 +62,38 @@ export function TabLayout() {
   const colorScheme = useColorScheme();
 
   return (
-    <Tabs>
+    <Tabs
+      screenOptions={{
+        tabBarActiveTintColor: colorScheme === 'dark' ? '#fff' : '#007bff',
+      }}
+    >
+      {/* ✅ Correction : Renommage de l'onglet index en "Formulaire de Rêve" */}
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: 'Formulaire de Rêve',
+          tabBarLabel: 'Formulaire de Rêve',
+          tabBarIcon: ({ color }) => <TabBarIcon name="edit" color={color} />,
+        }}
+      />
+
+      {/* Liste des Rêves */}
+      <Tabs.Screen
+        name="List"
+        options={{
+          title: 'Liste des Rêves',
+          tabBarLabel: 'Liste des Rêves',
+          tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />,
+        }}
+      />
+
+      {/* Onglet supplémentaire */}
       <Tabs.Screen
         name="two"
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="three"
-        options={{
-          title: 'Tab Three',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Paramètres',
+          tabBarLabel: 'Paramètres',
+          tabBarIcon: ({ color }) => <TabBarIcon name="cogs" color={color} />,
         }}
       />
     </Tabs>
