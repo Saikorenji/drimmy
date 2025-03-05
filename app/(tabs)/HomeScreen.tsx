@@ -11,7 +11,7 @@ export default function HomeScreen() {
     <View style={[styles.container, colorScheme === 'dark' ? styles.darkBackground : styles.lightBackground]}>
       <Card style={styles.card}>
         <Card.Content>
-          <Text style={styles.title}>Bienvenue dans votre Journal de Rêves 🌙</Text>
+          <Text style={styles.title}>Bienvenue sur Drimmy, votre journal de rêves 🌙</Text>
           <Text style={styles.subtitle}>
             Enregistrez vos rêves, suivez vos émotions et analysez-les au fil du temps.
           </Text>

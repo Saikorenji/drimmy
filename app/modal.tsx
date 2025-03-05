@@ -9,7 +9,7 @@ export default function InfoModal({ visible, onClose }) {
         <Dialog.Title style={styles.title}>🌙 À propos de l'application</Dialog.Title>
         <Dialog.Content>
           <Text style={styles.text}>
-            Cette application vous permet de noter et analyser vos rêves. Vous pouvez enregistrer la date,
+            L'application Drimmy vous permet de noter et d'analyser vos rêves. Vous pouvez enregistrer la date,
             la description, les émotions ressenties et bien plus encore !
           </Text>
           <Text style={styles.sectionTitle}>📌 Fonctionnalités :</Text>

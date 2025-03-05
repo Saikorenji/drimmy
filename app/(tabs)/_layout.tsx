@@ -11,7 +11,7 @@ export default function TabLayout() {
         tabBarActiveTintColor: colorScheme === 'dark' ? '#fff' : '#007bff',
       }}
     >
-      {/* ✅ Accueil */}
+      {/* ✅ Accueil - L'onglet principal */}
       <Tabs.Screen
         name="HomeScreen"
         options={{
@@ -21,7 +21,7 @@ export default function TabLayout() {
         }}
       />
 
-      {/* ✅ Correction : Déplacement de index et renommage en "Formulaire" */}
+      {/* ✅ Correction : "index" devient "Formulaire" */}
       <Tabs.Screen
         name="index"
         options={{
