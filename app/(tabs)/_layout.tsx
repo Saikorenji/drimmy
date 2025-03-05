@@ -35,7 +35,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="List"
         options={{
-          title: 'Liste des Rêves',
+          title: "Liste des Rêves",
           tabBarLabel: 'Liste des rêves',
           tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />,
         }}

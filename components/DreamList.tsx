@@ -8,7 +8,6 @@ export default function DreamList() {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
-  // Charger les rêves au démarrage
   useEffect(() => {
     fetchData();
   }, []);
@@ -21,14 +20,14 @@ export default function DreamList() {
 
   const fetchData = async () => {
     try {
-      setIsLoading(true); // Active le loader
+      setIsLoading(true);
       const data = await AsyncStorage.getItem('dreamFormDataArray');
       const dreamFormDataArray = data ? JSON.parse(data) : [];
       setDreams(dreamFormDataArray);
     } catch (error) {
       console.error('Erreur lors de la récupération des données:', error);
     } finally {
-      setIsLoading(false); // Désactive le loader une fois terminé
+      setIsLoading(false);
     }
   };
 
@@ -42,37 +41,72 @@ export default function DreamList() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>📜 Liste des Rêves :</Text>
+      {/* ✅ On garde un seul titre "Liste de tes rêves" */}
+      <Text style={styles.title}>📜 Liste de tes rêves :</Text>
 
-      <FlatList
-        data={dreams}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={styles.dreamItem}
-            onPress={() => router.push({ pathname: '/four', params: { dream: JSON.stringify(item) } })}
-          >
-            <Text style={styles.dreamTitle}>{item.dreamText}</Text>
-          </TouchableOpacity>
-        )}
-      />
+      {dreams.length === 0 ? (
+        <Text style={styles.noDreamText}>Aucun rêve enregistré.</Text>
+      ) : (
+        <FlatList
+          data={dreams}
+          keyExtractor={(item, index) => index.toString()}
+          showsVerticalScrollIndicator={true} // ✅ Afficher la barre de scroll
+          contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }} // ✅ Permet un bon affichage
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              style={styles.dreamItem}
+              onPress={() => router.push({ pathname: '/four', params: { dream: JSON.stringify(item) } })}
+            >
+              <Text style={styles.dreamTitle}>{item.dreamText}</Text>
+            </TouchableOpacity>
+          )}
+          ListFooterComponent={<View style={{ height: 30 }} />} // ✅ Espacement en bas
+        />
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 16 },
-  title: { fontSize: 20, fontWeight: 'bold', marginBottom: 10 },
-  dreamItem: {
-    padding: 10,
-    backgroundColor: '#f0f0f0',
-    marginBottom: 8,
-    borderRadius: 5,
+  container: {
+    flex: 1,
+    paddingHorizontal: 16,
+    backgroundColor: '#fff',
+    alignItems: 'center'
   },
-  dreamTitle: { fontSize: 16 },
+  title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginVertical: 20,
+    textAlign: 'center'
+  },
+  dreamItem: {
+    padding: 15,
+    backgroundColor: '#f7f7f7',
+    marginVertical: 8,
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 6,
+    elevation: 4,
+    width: '100%', // ✅ Prend toute la largeur disponible
+  },
+  dreamTitle: {
+    fontSize: 18,
+    fontWeight: '500',
+    textAlign: 'center',
+    color: '#333'
+  },
   loaderContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
+  },
+  noDreamText: {
+    fontSize: 16,
+    textAlign: 'center',
+    marginTop: 20,
+    color: '#888'
   },
 });
