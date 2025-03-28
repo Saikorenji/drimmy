@@ -1,19 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, Platform } from 'react-native';
 import { Switch, Card } from 'react-native-paper';
 import { useTheme } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Notifications from 'expo-notifications';
-import { useThemeContext } from '@/components/ThemeContext'; // 💡 Utilise le contexte global
 
 export default function SettingsScreen() {
-  const { colors } = useTheme();
-  const { isDarkMode, toggleDarkMode } = useThemeContext(); // ✅ Utilisation du contexte
+  const { colors } = useTheme(); // 🎨 Applique le Dark Mode
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const [isNotificationsEnabled, setIsNotificationsEnabled] = useState(false);
 
-  // 🔄 Charger la préférence pour les notifications
+  // ✅ Charger la préférence utilisateur au démarrage
   useEffect(() => {
     const loadPreferences = async () => {
+      const storedTheme = await AsyncStorage.getItem('darkMode');
+      if (storedTheme !== null) {
+        setIsDarkMode(JSON.parse(storedTheme));
+      }
+
       const storedNotifications = await AsyncStorage.getItem('notifications');
       if (storedNotifications !== null) {
         setIsNotificationsEnabled(JSON.parse(storedNotifications));
@@ -22,7 +26,14 @@ export default function SettingsScreen() {
     loadPreferences();
   }, []);
 
-  // ✅ Autorisation notifications
+  // ✅ Fonction pour basculer le mode sombre
+  const toggleDarkMode = async () => {
+    const newValue = !isDarkMode;
+    setIsDarkMode(newValue);
+    await AsyncStorage.setItem('darkMode', JSON.stringify(newValue));
+  };
+
+  // ✅ Demande la permission des notifications au lancement
   useEffect(() => {
     async function getPermission() {
       const { status } = await Notifications.getPermissionsAsync();
@@ -33,7 +44,7 @@ export default function SettingsScreen() {
     getPermission();
   }, []);
 
-  // ✅ Fonction pour activer/désactiver les notifications
+  // ✅ Fonction pour gérer les notifications
   const handleNotificationToggle = async () => {
     const newValue = !isNotificationsEnabled;
     setIsNotificationsEnabled(newValue);
@@ -46,7 +57,7 @@ export default function SettingsScreen() {
           body: "Ouvre l'application pour enregistrer ton dernier rêve !",
           sound: true,
         },
-        trigger: { hour: 8, minute: 0, repeats: true },
+        trigger: { hour: 8, minute: 0, repeats: true }, // 🔔 Notif à 08h chaque jour
       });
     } else {
       await Notifications.cancelAllScheduledNotificationsAsync();
@@ -57,7 +68,7 @@ export default function SettingsScreen() {
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Text style={[styles.title, { color: colors.text }]}>⚙️ Paramètres</Text>
 
-      {/* 🌙 Mode sombre */}
+      {/* ✅ Mode Sombre */}
       <Card style={[styles.card, { backgroundColor: colors.card }]}>
         <View style={styles.settingItem}>
           <Text style={[styles.label, { color: colors.text }]}>🌙 Mode Sombre</Text>
@@ -65,7 +76,7 @@ export default function SettingsScreen() {
         </View>
       </Card>
 
-      {/* 🔔 Notifications */}
+      {/* ✅ Notifications */}
       <Card style={[styles.card, { backgroundColor: colors.card }]}>
         <View style={styles.settingItem}>
           <Text style={[styles.label, { color: colors.text }]}>🔔 Rappels de rêves</Text>
@@ -90,8 +101,8 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 10,
     marginBottom: 12,
-    elevation: 3,
-    shadowColor: '#000',
+    elevation: 3, // ✅ Ombre sur Android
+    shadowColor: '#000', // ✅ Ombre sur iOS
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
