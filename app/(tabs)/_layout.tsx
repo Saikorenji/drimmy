@@ -1,17 +1,76 @@
-import { Tabs } from 'expo-router';
-import { useColorScheme } from '@/components/useColorScheme';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { useFonts } from 'expo-font';
+import { Stack, Tabs } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
+import { useEffect, useState } from 'react';
+import 'react-native-reanimated';
+
+import {
+  CustomLightTheme,
+  CustomDarkTheme,
+  customPaperLightTheme,
+  customPaperDarkTheme,
+} from '@/constants/Colors';
+
 import TabBarIcon from '@/components/TabBarIcon';
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+export {
+  ErrorBoundary,
+} from 'expo-router';
+
+export const unstable_settings = {
+  initialRouteName: 'HomeScreen',
+};
+
+SplashScreen.preventAutoHideAsync();
+
+export default function RootLayout() {
+  const [loaded, error] = useFonts({
+    SpaceMono: require('@/assets/fonts/SpaceMono-Regular.ttf'),
+    ...FontAwesome.font,
+  });
+
+  useEffect(() => {
+    if (error) throw error;
+  }, [error]);
+
+  useEffect(() => {
+    if (loaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded]);
+
+  if (!loaded) {
+    return null;
+  }
+
+  return <RootLayoutNav />;
+}
+
+function RootLayoutNav() {
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  return (
+    <PaperProvider theme={isDarkMode ? customPaperDarkTheme : customPaperLightTheme}>
+      <ThemeProvider value={isDarkMode ? CustomDarkTheme : CustomLightTheme}>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'À propos de l\'application' }} />
+        </Stack>
+      </ThemeProvider>
+    </PaperProvider>
+  );
+}
+
+export function TabLayout() {
+  const [isDarkMode] = useState(false);
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: colorScheme === 'dark' ? '#fff' : '#007bff',
+        tabBarActiveTintColor: isDarkMode ? '#fff' : '#4A90E2',
       }}
     >
-      {/* ✅ Accueil - L'onglet principal */}
       <Tabs.Screen
         name="HomeScreen"
         options={{
@@ -20,28 +79,22 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
         }}
       />
-
-      {/* ✅ Correction : "index" devient "Formulaire" */}
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Formulaire',
+          title: 'Formulaire de Rêve',
           tabBarLabel: 'Formulaire',
           tabBarIcon: ({ color }) => <TabBarIcon name="edit" color={color} />,
         }}
       />
-
-      {/* ✅ Liste des Rêves */}
       <Tabs.Screen
         name="List"
         options={{
-          title: "Liste des Rêves",
-          tabBarLabel: 'Liste des rêves',
+          title: 'Liste des Rêves',
+          tabBarLabel: 'Liste des Rêves',
           tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />,
         }}
       />
-
-      {/* ✅ Onglet Paramètres */}
       <Tabs.Screen
         name="two"
         options={{
