@@ -9,7 +9,6 @@ import { PaperProvider, Switch } from 'react-native-paper';
 import { View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { ThemeProvider, useThemeContext } from '@/components/ThemeContext';
 import TabBarIcon from '@/components/TabBarIcon';
 
 // 🎯 Création du Contexte pour le Mode Sombre
