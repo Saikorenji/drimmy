@@ -1,10 +1,6 @@
-// app/(tabs)/three.tsx
-
 import { StyleSheet } from 'react-native';
 import { Text, View } from '@/components/Themed';
-
-// Correction de l'importation de DreamList
-import DreamList from '../../components/DreamList'; // <-- Chemin relatif
+import DreamList from '../../components/DreamList';
 
 export default function TabThreeScreen() {
   return (
@@ -29,6 +25,6 @@ const styles = StyleSheet.create({
     marginVertical: 30,
     height: 1,
     width: '80%',
-    backgroundColor: '#eee', // Ajout pour éviter le problème de lightColor/darkColor
+    backgroundColor: '#eee',
   },
 });

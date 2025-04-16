@@ -41,8 +41,7 @@ export default function DreamList() {
 
   return (
     <View style={styles.container}>
-      {/* ✅ On garde un seul titre "Liste de tes rêves" */}
-      <Text style={styles.title}>📜 Liste de tes rêves :</Text>
+      <Text style={styles.title}>Liste de tes rêves :</Text>
 
       {dreams.length === 0 ? (
         <Text style={styles.noDreamText}>Aucun rêve enregistré.</Text>
@@ -50,8 +49,8 @@ export default function DreamList() {
         <FlatList
           data={dreams}
           keyExtractor={(item, index) => index.toString()}
-          showsVerticalScrollIndicator={true} // ✅ Afficher la barre de scroll
-          contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }} // ✅ Permet un bon affichage
+          showsVerticalScrollIndicator={true} //
+          contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }} //
           renderItem={({ item }) => (
             <TouchableOpacity
               style={styles.dreamItem}
@@ -60,7 +59,7 @@ export default function DreamList() {
               <Text style={styles.dreamTitle}>{item.dreamText}</Text>
             </TouchableOpacity>
           )}
-          ListFooterComponent={<View style={{ height: 30 }} />} // ✅ Espacement en bas
+          ListFooterComponent={<View style={{ height: 30 }} />} //
         />
       )}
     </View>
@@ -90,7 +89,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 3 },
     shadowRadius: 6,
     elevation: 4,
-    width: '100%', // ✅ Prend toute la largeur disponible
+    width: '100%', //
   },
   dreamTitle: {
     fontSize: 18,

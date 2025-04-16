@@ -15,7 +15,7 @@ import TabBarIcon from '@/components/TabBarIcon';
 const DarkModeContext = createContext();
 
 export {
-  ErrorBoundary,
+  ErrorBoundary,-
 } from 'expo-router';
 
 export const unstable_settings = {
