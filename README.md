@@ -82,21 +82,9 @@ drimmy/
 
 ---
 
-## 💡 Idées futures
-
-- Exportation PDF des rêves enregistrés
-- Statistiques : fréquence des émotions, récurrence des types
-- Recherche par mots-clés
-- Analyse sémantique (bonus IA)
-- Ajout d’images ou dessins de rêve
-- Sauvegarde cloud (Firebase, Supabase…)
-
----
-
 ## 🧑‍💻 Auteur
 
-> Projet réalisé par **Saikorenji**  
-> [Portfolio](https://github.com/ton-user) – [LinkedIn](https://www.linkedin.com/in/ton-lien)
+> Projet réalisé par **Saikorenji**
 
 ---
 
