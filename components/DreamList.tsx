@@ -41,7 +41,7 @@ export default function DreamList() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Liste de tes rêves :</Text>
+      <Text style={styles.title}>📜 Liste de tes rêves :</Text>
 
       {dreams.length === 0 ? (
         <Text style={styles.noDreamText}>Aucun rêve enregistré.</Text>
@@ -49,17 +49,24 @@ export default function DreamList() {
         <FlatList
           data={dreams}
           keyExtractor={(item, index) => index.toString()}
-          showsVerticalScrollIndicator={true} //
-          contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }} //
+          showsVerticalScrollIndicator={true}
+          contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}
           renderItem={({ item }) => (
             <TouchableOpacity
               style={styles.dreamItem}
-              onPress={() => router.push({ pathname: '/four', params: { dream: JSON.stringify(item) } })}
+              onPress={() =>
+                router.push({ pathname: '/four', params: { dream: JSON.stringify(item) } })
+              }
             >
               <Text style={styles.dreamTitle}>{item.dreamText}</Text>
+              {item.date && (
+                <Text style={styles.dreamDate}>
+                  📅 {new Date(item.date).toLocaleDateString('fr-FR')}
+                </Text>
+              )}
             </TouchableOpacity>
           )}
-          ListFooterComponent={<View style={{ height: 30 }} />} //
+          ListFooterComponent={<View style={{ height: 30 }} />}
         />
       )}
     </View>
@@ -71,13 +78,13 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16,
     backgroundColor: '#fff',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   title: {
     fontSize: 22,
     fontWeight: 'bold',
     marginVertical: 20,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   dreamItem: {
     padding: 15,
@@ -89,23 +96,29 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 3 },
     shadowRadius: 6,
     elevation: 4,
-    width: '100%', //
+    width: '100%',
   },
   dreamTitle: {
     fontSize: 18,
     fontWeight: '500',
     textAlign: 'center',
-    color: '#333'
+    color: '#333',
+  },
+  dreamDate: {
+    fontSize: 14,
+    textAlign: 'center',
+    marginTop: 4,
+    color: '#666',
   },
   loaderContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   noDreamText: {
     fontSize: 16,
     textAlign: 'center',
     marginTop: 20,
-    color: '#888'
+    color: '#888',
   },
 });

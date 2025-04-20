@@ -11,18 +11,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import TabBarIcon from '@/components/TabBarIcon';
 
-// 🎯 Création du Contexte pour le Mode Sombre
-const DarkModeContext = createContext();
-
-export {
-  ErrorBoundary,-
-} from 'expo-router';
+export { ErrorBoundary } from 'expo-router';
 
 export const unstable_settings = {
   initialRouteName: 'HomeScreen',
 };
 
 SplashScreen.preventAutoHideAsync();
+
+// 💡 Contexte global pour le mode sombre
+const DarkModeContext = createContext();
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
@@ -47,11 +45,9 @@ export default function RootLayout() {
   return <DarkModeProvider />;
 }
 
-// ✅ Provider pour le Mode Sombre
 function DarkModeProvider() {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
-  // ✅ Charger la préférence du mode sombre au lancement
   useEffect(() => {
     const loadDarkMode = async () => {
       const storedTheme = await AsyncStorage.getItem('darkMode');
@@ -62,7 +58,6 @@ function DarkModeProvider() {
     loadDarkMode();
   }, []);
 
-  // ✅ Basculer et sauvegarder le mode sombre
   const toggleDarkMode = async () => {
     const newValue = !isDarkMode;
     setIsDarkMode(newValue);
@@ -92,7 +87,6 @@ export function TabLayout() {
         tabBarActiveTintColor: isDarkMode ? '#fff' : '#007bff',
       }}
     >
-      {/* ✅ Paramètres avec Mode Sombre */}
       <Tabs.Screen
         name="two"
         options={{
@@ -107,7 +101,6 @@ export function TabLayout() {
         }}
       />
 
-      {/* ✅ Accueil */}
       <Tabs.Screen
         name="HomeScreen"
         options={{
@@ -117,7 +110,6 @@ export function TabLayout() {
         }}
       />
 
-      {/* ✅ Formulaire */}
       <Tabs.Screen
         name="index"
         options={{
@@ -127,7 +119,6 @@ export function TabLayout() {
         }}
       />
 
-      {/* ✅ Liste des Rêves */}
       <Tabs.Screen
         name="List"
         options={{
