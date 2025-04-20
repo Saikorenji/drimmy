@@ -7,8 +7,7 @@ Ce projet a été développé avec **React Native** (via **Expo**), et permet de
 - Consulter une liste de tous les rêves
 - Visualiser les détails d’un rêve
 - Exporter les rêves en PDF (à venir)
-- Recevoir des notifications de rappel
-- Profiter d’une UI/UX propre avec animations et dark mode (optionnel)
+- Recevoir des notifications de rappel (à venir)
 
 ---
 
@@ -50,14 +49,14 @@ Puis scanner le QR code avec l’application **Expo Go** ou utiliser un simulate
 
 ## 📸 Fonctionnalités principales
 
-| Fonction                            | Description |
-|-------------------------------------|-------------|
-| 📝 Formulaire de rêve               | Saisie du rêve, émotions, tonalité, signification... |
-| 📜 Liste des rêves                  | Affichage des rêves enregistrés |
-| 🔎 Détails complets                 | Vue détaillée avec icônes et mise en page propre |
-| 📩 Notification quotidienne (08h00) | Rappel d’écriture |
-| 📤 Export PDF (à venir)             | Fonction d’export des rêves |
-| 🌗 Mode sombre (à venir)            | Prise en charge via React Navigation |
+| Fonction                              | Description |
+|---------------------------------------|-------------|
+| 📝 Formulaire de rêve                 | Saisie du rêve, émotions, tonalité, signification... |
+| 📜 Liste des rêves                    | Affichage des rêves enregistrés |
+| 🔎 Détails complets                   | Vue détaillée avec icônes et mise en page propre |
+| 📩 Notification quotidienne (à venir) | Rappel d’écriture |
+| 📤 Export PDF (à venir)               | Fonction d’export des rêves |
+| 🌗 Mode sombre (à venir)              | Prise en charge via React Navigation |
 
 ---
 
